@@ -138,9 +138,38 @@ body{font-family:var(--sans);line-height:1.95;font-size:15px;-webkit-font-smooth
   background:var(--ink);color:var(--paper);font-size:13px;letter-spacing:.06em;padding:10px 18px;border-radius:999px;
   opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:99}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+/* 取货码遮罩：只挡视线，不是加密。去掉这层就删掉本段 + #gate + 末尾那段脚本 */
+body.locked{overflow:hidden}
+#gate{position:fixed;top:0;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;z-index:200;
+  background:var(--paper);display:flex;flex-direction:column;
+  padding:calc(30px + env(safe-area-inset-top)) clamp(24px,6.4vw,30px) calc(28px + env(safe-area-inset-bottom))}
+#gate.off{display:none}
+#gate .g-cap{font-size:14px;letter-spacing:.14em;color:var(--muted)}
+#gate .g-t{font-family:var(--serif);font-size:28px;line-height:1.5;letter-spacing:.02em;margin:30px 0 12px;color:var(--ink)}
+#gate .g-s{font-size:14.5px;color:var(--ink2);line-height:1.95;margin:0}
+#gate .g-grow{flex:1 1 auto;min-height:24px}
+#gate .g-in{display:block;width:100%;border:1px solid var(--line);background:var(--card);border-radius:2px;
+  padding:16px 18px;font-size:20px;letter-spacing:.42em;text-align:center;text-indent:.42em;font-family:var(--num);
+  color:var(--ink);outline:none;-webkit-appearance:none;transition:border-color .15s}
+#gate .g-in:focus{border-color:var(--ink)}
+#gate .g-in.err{border-color:var(--accent);animation:gsh .34s}
+@keyframes gsh{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+#gate .g-err{font-size:13px;color:var(--accent);letter-spacing:.06em;line-height:1.6;min-height:21px;margin:10px 0 0}
+#gate .btn{margin-top:8px}
+#gate .g-foot{font-size:12px;color:var(--muted);letter-spacing:.04em;line-height:1.9;margin:22px 0 0;text-align:center}
 </style>
 </head>
 <body>
+<div id="gate">
+  <div class="g-cap">测一测</div>
+  <div class="g-t">输入取货码<br>打开这个测试</div>
+  <p class="g-s">码在下单后发给你。输入一次，之后同一台手机再打开不用再输。</p>
+  <div class="g-grow"></div>
+  <input class="g-in" id="g-in" type="tel" inputmode="numeric" maxlength="4" placeholder="····" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="取货码">
+  <div class="g-err" id="g-err"></div>
+  <button class="btn" id="g-go">打开</button>
+  <div class="g-foot">本次测试只按你选的题归类，不判断谁对谁错。<br>只作娱乐参考。</div>
+</div>
 <div id="app">
   <section id="intro">
     <div class="cap-row"><span class="cap">12 题 · 约 2 分钟</span><span class="cap-r">测一测</span></div>
@@ -340,6 +369,32 @@ $('copy').onclick=async()=>{
   const txt=[r.identity,r.oneliner,r.headline,'——你会因为什么和好朋友走散'].join('\n');
   try{await navigator.clipboard.writeText(txt);toast('已复制');}catch(e){toast('复制失败，长按选中文字');}
 };
+
+/* 取货码：视觉遮挡，不是加密。改码就改下面这一行 */
+const ACCESS_CODE="7391";
+(function(){
+  const gate=$('gate'),inp=$('g-in'),err=$('g-err'),go=$('g-go'),KEY='cc_gate_ok';
+  function leave(){gate.classList.add('off');document.body.classList.remove('locked');}
+  let saved=null;
+  try{saved=localStorage.getItem(KEY);}catch(e){}
+  if(saved==='1'){leave();return;}
+  document.body.classList.add('locked');
+  setTimeout(()=>{try{inp.focus();}catch(e){}},80);
+  function check(){
+    if(inp.value.replace(/\D/g,'')===ACCESS_CODE){
+      try{localStorage.setItem(KEY,'1');}catch(e){}
+      leave();return;
+    }
+    err.textContent='码不对，再看看包装信息';
+    inp.classList.add('err');
+    setTimeout(()=>inp.classList.remove('err'),360);
+    inp.value='';
+    try{inp.focus();}catch(e){}
+  }
+  go.onclick=check;
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();check();}});
+  inp.addEventListener('input',()=>{inp.value=inp.value.replace(/\D/g,'');err.textContent='';});
+})();
 </script>
 </body>
 </html>
