@@ -141,14 +141,14 @@ body{font-family:var(--sans);line-height:1.95;font-size:15px;-webkit-font-smooth
 /* 取货码遮罩：只挡视线，不是加密。去掉这层就删掉本段 + #gate + 末尾那段脚本 */
 body.locked{overflow:hidden}
 #gate{position:fixed;top:0;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;z-index:200;
-  background:var(--paper);display:flex;flex-direction:column;
-  padding:calc(30px + env(safe-area-inset-top)) clamp(24px,6.4vw,30px) calc(28px + env(safe-area-inset-bottom))}
+  background:var(--paper);display:flex;flex-direction:column;justify-content:center;
+  padding:calc(92px + env(safe-area-inset-top)) clamp(24px,6.4vw,30px) calc(84px + env(safe-area-inset-bottom))}
 #gate.off{display:none}
-#gate .g-cap{font-size:14px;letter-spacing:.14em;color:var(--muted)}
-#gate .g-t{font-family:var(--serif);font-size:28px;line-height:1.5;letter-spacing:.02em;margin:30px 0 12px;color:var(--ink)}
+#gate .g-cap{position:absolute;top:calc(32px + env(safe-area-inset-top));left:clamp(24px,6.4vw,30px);
+  font-size:14px;letter-spacing:.14em;color:var(--muted)}
+#gate .g-t{font-family:var(--serif);font-size:31px;line-height:1.45;letter-spacing:.03em;margin:0 0 14px;color:var(--ink)}
 #gate .g-s{font-size:14.5px;color:var(--ink2);line-height:1.95;margin:0}
-#gate .g-tick{margin:30px 0 0}
-#gate .g-grow{flex:1 1 auto;min-height:24px}
+#gate .g-tick{margin:28px 0 26px}
 #gate .g-in{display:block;width:100%;border:1px solid var(--line);background:var(--card);border-radius:2px;
   padding:16px 18px;font-size:20px;letter-spacing:.42em;text-align:center;text-indent:.42em;font-family:var(--num);
   color:var(--ink);outline:none;-webkit-appearance:none;transition:border-color .15s}
@@ -157,19 +157,20 @@ body.locked{overflow:hidden}
 @keyframes gsh{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 #gate .g-err{font-size:13px;color:var(--accent);letter-spacing:.06em;line-height:1.6;min-height:21px;margin:10px 0 0}
 #gate .btn{margin-top:8px}
-#gate .g-foot{font-size:12px;color:var(--muted);letter-spacing:.04em;line-height:1.9;margin:22px 0 0;text-align:center}
+#gate .g-foot{position:absolute;left:clamp(24px,6.4vw,30px);right:clamp(24px,6.4vw,30px);
+  bottom:calc(26px + env(safe-area-inset-bottom));margin:0;
+  font-size:12px;color:var(--muted);letter-spacing:.04em;line-height:1.9;text-align:center}
 </style>
 </head>
 <body>
 <div id="gate">
   <div class="g-cap">测一测</div>
-  <div class="g-t">输入取货码<br>打开这个测试</div>
-  <p class="g-s">码在下单后发给你。输入一次，之后同一台手机再打开不用再输。</p>
+  <div class="g-t">对个暗号</div>
+  <p class="g-s">暗号对了，才放你进去。<br>码在下单后发你，输一次就记住这台手机。</p>
   <div class="g-tick"><div class="tick"></div></div>
-  <div class="g-grow"></div>
-  <input class="g-in" id="g-in" type="tel" inputmode="numeric" maxlength="4" placeholder="····" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="取货码">
+  <input class="g-in" id="g-in" type="tel" inputmode="numeric" maxlength="4" placeholder="····" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="暗号">
   <div class="g-err" id="g-err"></div>
-  <button class="btn" id="g-go">打开</button>
+  <button class="btn" id="g-go">开门</button>
   <div class="g-foot">本次测试只按你选的题归类，不判断谁对谁错。<br>只作娱乐参考。</div>
 </div>
 <div id="app">
@@ -387,7 +388,7 @@ const ACCESS_CODE="7391";
       try{localStorage.setItem(KEY,'1');}catch(e){}
       leave();return;
     }
-    err.textContent='码不对，再看看你收到的信息';
+    err.textContent='暗号不对，再看看你收到的信息';
     inp.classList.add('err');
     setTimeout(()=>inp.classList.remove('err'),360);
     inp.value='';
