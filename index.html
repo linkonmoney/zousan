@@ -178,11 +178,11 @@ body.locked{overflow:hidden}
       </svg>
     </div>
     <div class="g-cap">测一测</div>
-    <div class="g-t">对个暗号</div>
-    <p class="g-s">暗号对了，才放你进去。<br>码在下单后发你，输一次就记住这台手机。</p>
-    <input class="g-in" id="g-in" type="tel" inputmode="numeric" maxlength="4" placeholder="····" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="暗号">
+    <div class="g-t">访问验证</div>
+    <p class="g-s">这是一份付费测试，码在下单后发给你。<br>输一次，这台手机就记住了。</p>
+    <input class="g-in" id="g-in" type="tel" inputmode="numeric" maxlength="4" placeholder="····" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="访问码">
     <div class="g-err" id="g-err"></div>
-    <button class="btn" id="g-go">开门</button>
+    <button class="btn" id="g-go">进入测试</button>
   </div>
   <div class="g-foot">本次测试只按你选的题归类，不判断谁对谁错。<br>只作娱乐参考。</div>
 </div>
@@ -401,7 +401,7 @@ const ACCESS_CODE="7391";
       try{localStorage.setItem(KEY,'1');}catch(e){}
       leave();return;
     }
-    err.textContent='暗号不对，再看看你收到的信息';
+    err.textContent='码不对，再看看你收到的信息';
     inp.classList.add('err');
     setTimeout(()=>inp.classList.remove('err'),360);
     inp.value='';
