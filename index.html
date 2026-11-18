@@ -385,7 +385,7 @@ const ACCESS_CODE="7391";
       try{localStorage.setItem(KEY,'1');}catch(e){}
       leave();return;
     }
-    err.textContent='码不对，再看看包装信息';
+    err.textContent='码不对，再看看你收到的信息';
     inp.classList.add('err');
     setTimeout(()=>inp.classList.remove('err'),360);
     inp.value='';
