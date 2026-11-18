@@ -141,36 +141,49 @@ body{font-family:var(--sans);line-height:1.95;font-size:15px;-webkit-font-smooth
 /* 取货码遮罩：只挡视线，不是加密。去掉这层就删掉本段 + #gate + 末尾那段脚本 */
 body.locked{overflow:hidden}
 #gate{position:fixed;top:0;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;z-index:200;
-  background:var(--paper);display:flex;flex-direction:column;justify-content:center;
-  padding:calc(92px + env(safe-area-inset-top)) clamp(24px,6.4vw,30px) calc(84px + env(safe-area-inset-bottom))}
+  background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:calc(26px + env(safe-area-inset-top)) clamp(18px,5vw,26px) calc(62px + env(safe-area-inset-bottom))}
 #gate.off{display:none}
-#gate .g-cap{position:absolute;top:calc(32px + env(safe-area-inset-top));left:clamp(24px,6.4vw,30px);
-  font-size:14px;letter-spacing:.14em;color:var(--muted)}
-#gate .g-t{font-family:var(--serif);font-size:31px;line-height:1.45;letter-spacing:.03em;margin:0 0 14px;color:var(--ink)}
-#gate .g-s{font-size:14.5px;color:var(--ink2);line-height:1.95;margin:0}
-#gate .g-tick{margin:28px 0 26px}
-#gate .g-in{display:block;width:100%;border:1px solid var(--line);background:var(--card);border-radius:2px;
-  padding:16px 18px;font-size:20px;letter-spacing:.42em;text-align:center;text-indent:.42em;font-family:var(--num);
-  color:var(--ink);outline:none;-webkit-appearance:none;transition:border-color .15s}
-#gate .g-in:focus{border-color:var(--ink)}
+#gate .g-card{width:100%;background:var(--card);border:1px solid rgba(28,26,21,.07);border-radius:24px;
+  padding:40px 26px 32px;text-align:center;
+  box-shadow:0 26px 60px -34px rgba(28,26,21,.45),0 1px 0 rgba(255,255,255,.7) inset}
+#gate .g-icon{width:58px;height:58px;border-radius:17px;background:var(--tint);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 22px}
+#gate .g-icon svg{width:27px;height:27px}
+#gate .g-cap{font-size:11.5px;letter-spacing:.3em;color:var(--muted);margin:0 0 16px;text-indent:.3em}
+#gate .g-t{font-family:var(--serif);font-size:30px;line-height:1.4;letter-spacing:.05em;margin:0 0 14px;color:var(--ink)}
+#gate .g-s{font-size:13.5px;color:var(--ink2);line-height:1.95;margin:0 0 28px}
+#gate .g-in{display:block;width:100%;border:1px solid var(--line);background:#fffdf6;border-radius:14px;
+  padding:17px 18px;font-size:20px;letter-spacing:.42em;text-align:center;text-indent:.42em;font-family:var(--num);
+  color:var(--ink);outline:none;-webkit-appearance:none;transition:border-color .15s,box-shadow .15s}
+#gate .g-in:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(28,26,21,.06)}
 #gate .g-in.err{border-color:var(--accent);animation:gsh .34s}
 @keyframes gsh{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-#gate .g-err{font-size:13px;color:var(--accent);letter-spacing:.06em;line-height:1.6;min-height:21px;margin:10px 0 0}
-#gate .btn{margin-top:8px}
-#gate .g-foot{position:absolute;left:clamp(24px,6.4vw,30px);right:clamp(24px,6.4vw,30px);
-  bottom:calc(26px + env(safe-area-inset-bottom));margin:0;
+#gate .g-err{font-size:12.5px;color:var(--accent);letter-spacing:.06em;line-height:1.6;min-height:20px;margin:10px 0 0}
+#gate .btn{margin-top:8px;border-radius:14px}
+#gate .g-foot{position:absolute;left:clamp(18px,5vw,26px);right:clamp(18px,5vw,26px);
+  bottom:calc(24px + env(safe-area-inset-bottom));margin:0;
   font-size:12px;color:var(--muted);letter-spacing:.04em;line-height:1.9;text-align:center}
 </style>
 </head>
 <body>
 <div id="gate">
-  <div class="g-cap">测一测</div>
-  <div class="g-t">对个暗号</div>
-  <p class="g-s">暗号对了，才放你进去。<br>码在下单后发你，输一次就记住这台手机。</p>
-  <div class="g-tick"><div class="tick"></div></div>
-  <input class="g-in" id="g-in" type="tel" inputmode="numeric" maxlength="4" placeholder="····" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="暗号">
-  <div class="g-err" id="g-err"></div>
-  <button class="btn" id="g-go">开门</button>
+  <div class="g-card">
+    <div class="g-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4.6" y="10.6" width="14.8" height="9.6" rx="2.4"/>
+        <path d="M8.2 10.6V7.9a3.8 3.8 0 0 1 7.6 0v2.7"/>
+        <circle cx="12" cy="14.9" r="1.15" fill="currentColor" stroke="none"/>
+        <path d="M12 16.2v1.9"/>
+      </svg>
+    </div>
+    <div class="g-cap">测一测</div>
+    <div class="g-t">对个暗号</div>
+    <p class="g-s">暗号对了，才放你进去。<br>码在下单后发你，输一次就记住这台手机。</p>
+    <input class="g-in" id="g-in" type="tel" inputmode="numeric" maxlength="4" placeholder="····" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="暗号">
+    <div class="g-err" id="g-err"></div>
+    <button class="btn" id="g-go">开门</button>
+  </div>
   <div class="g-foot">本次测试只按你选的题归类，不判断谁对谁错。<br>只作娱乐参考。</div>
 </div>
 <div id="app">
